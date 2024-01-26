@@ -19,7 +19,10 @@ class ScraperRequest(BaseModel):
     mode: str
     number: int
     language: str = "en"
-    
+
+@app.get("/check")
+async def root():
+    return "Calling Sentix Application for every 10 min...."
 
 @app.post("/get_tweets")
 async def get_tweets(request: ScraperRequest):
