@@ -8,6 +8,8 @@ app = FastAPI()
 scraper = Nitter(0)
 API_URL = "https://api-inference.huggingface.co/models/cardiffnlp/twitter-roberta-base-sentiment"
 headers = {"Authorization": "Bearer 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"}
+Working_URL="https://nitter.poast.org/"
+Check_URL='https://status.d420.de/api/v1/instances'
 
 def query(payload):
 	response = requests.post(API_URL, headers=headers, json=payload)
@@ -27,8 +29,26 @@ async def root():
 @app.post("/get_tweets")
 async def get_tweets(request: ScraperRequest):
     try:
+
+	response = requests.get(Check_URL)
+	data=response.json()
+	work=[]
+	for i in data['hosts']:
+		if i['rss']:
+			work+=[i['url']]
+			Working_URL=i['url']
+	tweets=[]
+	i=0 
+	while (i<len(work)):
+		twt=scraper.get_tweets(request.text, mode=request.mode, number=request.number, language=request.language,instance=work[i])
+		if len(twt['tweets'])!=0:
+			Working_URL=work[i]
+			maintweet=twt
+			break
+		i+=1 
+	
         
-        tweets = scraper.get_tweets(request.text, mode=request.mode, number=request.number, language=request.language)
+        #tweets = scraper.get_tweets(request.text, mode=request.mode, number=request.number, language=request.language)
 
         final_tweets = []
         for x in tweets['tweets']:
