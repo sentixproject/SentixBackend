@@ -29,7 +29,6 @@ async def root():
 @app.post("/get_tweets")
 async def get_tweets(request: ScraperRequest):
     try:
-
 	response = requests.get(Check_URL)
 	data=response.json()
 	work=[]
@@ -46,10 +45,7 @@ async def get_tweets(request: ScraperRequest):
 			maintweet=twt
 			break
 		i+=1 
-	
-        
         #tweets = scraper.get_tweets(request.text, mode=request.mode, number=request.number, language=request.language)
-
         final_tweets = []
         for x in tweets['tweets']:
             if f"twitter.com/{request.text[1:]}" not in x['link']:
