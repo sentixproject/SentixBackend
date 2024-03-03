@@ -72,7 +72,7 @@ async def get_tweets(request: ScraperRequest):
 
 @app.post("/get_news/")
 async def get_news(request: ScraperRequest):
-    google_news = GNews(language=request.language, country='India', period='1m', start_date=None, end_date=None, max_results=request.number, exclude_websites=['yahoo.com', 'cnn.com'])
+    google_news = GNews(language=request.language, country='India', period='7d', start_date=None, end_date=None, max_results=request.number, exclude_websites=['yahoo.com', 'cnn.com'])
     news = google_news.get_news(request.text)
     final = []
     for x in news:
