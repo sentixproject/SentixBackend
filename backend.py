@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from ntscraper import Nitter
+from gnews import GNews
 import requests
 
 app = FastAPI()
@@ -67,6 +68,18 @@ async def get_tweets(request: ScraperRequest):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during scraping: {str(e)}")
+
+
+@app.post("/get_news/")
+async def get_news(request: ScraperRequest):
+    google_news = GNews(language=request.language, country='India', period='1m', start_date=None, end_date=None, max_results=request.number, exclude_websites=['yahoo.com', 'cnn.com'])
+    news = google_news.get_news(request.text)
+    final = []
+    for x in news:
+        data = {'twitter_link': x['url'], 'text': x['description'], 'score': query({"inputs": x['description']})}
+        final.append(data)
+    print(len(final))
+    return final
 
 
 if __name__ == "__main__":
