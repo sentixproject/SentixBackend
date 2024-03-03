@@ -43,3 +43,4 @@ pydantic-core
 pyparsing
 python-dateutil
 python-multipart
+gnews
